@@ -21,18 +21,62 @@ def process_post_request(request, *args, **kwargs):
 
     keyword_args_json = json.loads(kwargs['payload'])
     print(keyword_args_json)
+    print("\n")
+    print("\n")
 
     # get event type
     event = keyword_args_json['event']
 
+    # case for different POST options
+    if event.startswith("media"):
+        format_playback_event(keyword_args_json, event)
+    elif event.startswith("library"):
+        # format_content_event(keyword_args_json,event)
+        return
+    elif event.startswith("admin") or event.startswith("device") or event.startswith("playback"):
+        # format_owner_event(keyword_args_json,event)
+        return
+    else:
+        print("Unknown payload type: {}".format(event))
+        return
+
+def format_owner_event(payload_args,event_type):
+    # if one of following events:
+    # admin.database.backup
+    # admin.database.corrupted
+    # device.new
+    # playback.started
+    # do something  
+    return
+
+def format_content_event(payload_args, event_type):
+    # if one of following events:
+    # library.on.deck
+    # library.new
+    # do something
+    return
+
+def format_playback_event(payload_args, event_type):
+    
     print("Getting event info...")
+    
+    # event info
+    if event_type == 'media.play':
+        eventTitle='Media Started'
+    elif event_type == 'media.rate':
+        #eventTitle='Media Rating'
+        return
+    else:
+        #eventTitle='Unknown'
+        return
+
     # user account info
-    account = keyword_args_json['Account']
+    account = payload_args['Account']
     username = account['title']
     thumbnail = account['thumb']
 
     # player info
-    player = keyword_args_json['Player']
+    player = payload_args['Player']
     playerTitle = player['title']
     playerIP = player['publicAddress']
 
@@ -44,7 +88,7 @@ def process_post_request(request, *args, **kwargs):
     city_state_country = city + ", " + state + ", " + country
 
     # metadata
-    metadata = keyword_args_json['Metadata']
+    metadata = payload_args['Metadata']
     mediaType = metadata['librarySectionType']
     mediaSummary = metadata['summary']
     mediaRating = metadata['contentRating']
@@ -52,26 +96,11 @@ def process_post_request(request, *args, **kwargs):
     mediaTitle = metadata['title']
     artURL = metadata['art']
 
-    # case for different POST options
-    if event == 'media.play':
-        eventTitle = "Media Started"
-    elif event == 'media.pause':
-        eventTitle = "Media Paused"
-    elif event == 'media.resumed':
-        eventTitle = "Media Resumed"
-    elif event == 'media.stop':
-        eventTitle = "Media Stopped"
-    elif event == 'media.scrobble':
-        eventTitle = "Media Scrobbled"
-    else:
-        return
-
-
     # post data to Discord webhook
     webhook = DiscordWebhook(url=discord_webhook_url)
 
     # create embed object for webhook
-    embed = DiscordEmbed(title=eventTitle, description="Trevor isn't helping me code", color=242424)
+    embed = DiscordEmbed(title=eventTitle, description="Placeholder", color=242424)
     embed.set_thumbnail(url=thumbnail)
     embed.set_author(name="Soot Gremlin",url="https://github.com/D3ezy",icon_url="https://avatars.githubusercontent.com/u/32646503?s=400&u=9f02fae3237ee64b1ceb853d37722c67ce4f8338&v=4")
         
@@ -85,7 +114,7 @@ def process_post_request(request, *args, **kwargs):
         # get movie art
         artRelativePath = metadata['thumb']
         artFullPath = plex_url_header + artRelativePath + plex_authtoken
-        embed.set_image(proxy_url=artFullPath)
+        embed.set_image(url='https://i.imgur.com/Oe0UaTL.jpeg')
         embed.add_embed_field(name='Title', value=mediaTitle)
         embed.add_embed_field(name='Studio', value=mediaStudio)
         embed.add_embed_field(name='IMDb Link', value=imdb_link, inline=False)
@@ -106,12 +135,13 @@ def process_post_request(request, *args, **kwargs):
     embed.add_embed_field(name='Username', value=username)
     embed.add_embed_field(name='Player Type', value=playerTitle)
     embed.add_embed_field(name='Location', value=city_state_country, inline=False)
-    embed.set_footer(text='Trevor ditched me for a shitty Bitcoin ticker', icon_url=thumbnail)
+    embed.set_footer(text='Placeholder', icon_url='https://www.pngkey.com/png/full/910-9103810_plex-media-server-transparent-plex-icon.png')
     embed.set_timestamp()
 
     # add embed object to webhook
     webhook.add_embed(embed)
     response = webhook.execute()
+    return
 
 def main():
     plex_listener = webhook_listener.Listener(handlers={"POST": process_post_request}, port=8080)
