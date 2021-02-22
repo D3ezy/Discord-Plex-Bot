@@ -1,0 +1,66 @@
+{
+   "event":"media.play",
+   "user":true,
+   "owner":true,
+   "Account":{
+      "id":1,
+      "thumb":"https://plex.tv/users/80a6e69c3c1f03cb/avatar?c=1586906337",
+      "title":"matthew.dey"
+   },
+   "Server":{
+      "title":"DZ-PLEX02",
+      "uuid":"566fab946feaff9bcaf819bac2ab1cec5eb7ac61"
+   },
+   "Player":{
+      "local":true,
+      "publicAddress":"73.195.83.228",
+      "title":"Chrome",
+      "uuid":"tqvr2dirf5qrd7pun4j8k909"
+   },
+   "Metadata":{
+      "librarySectionType":"show",
+      "ratingKey":"6557",
+      "key":"/library/metadata/6557",
+      "parentRatingKey":"6556",
+      "grandparentRatingKey":"6555",
+      "guid":"com.plexapp.agents.thetvdb://250487/1/1?lang=en",
+      "parentGuid":"com.plexapp.agents.thetvdb://250487/1?lang=en",
+      "grandparentGuid":"com.plexapp.agents.thetvdb://250487?lang=en",
+      "type":"episode",
+      "title":"Pilot",
+      "grandparentKey":"/library/metadata/6555",
+      "parentKey":"/library/metadata/6556",
+      "librarySectionTitle":"TV Shows",
+      "librarySectionID":3,
+      "librarySectionKey":"/library/sections/3",
+      "grandparentTitle":"American Horror Story",
+      "parentTitle":"Season 1",
+      "contentRating":"TV-MA",
+      "summary":"A therapist and his family move across the country to escape their troubled past, but quickly discover that their new home comes with its own horrific baggage.",
+      "index":1,
+      "parentIndex":1,
+      "rating":7.6,
+      "year":2011,
+      "thumb":"/library/metadata/6557/thumb/1586736742",
+      "art":"/library/metadata/6555/art/1586736713",
+      "parentThumb":"/library/metadata/6556/thumb/1586736711",
+      "grandparentThumb":"/library/metadata/6555/thumb/1586736713",
+      "grandparentArt":"/library/metadata/6555/art/1586736713",
+      "grandparentTheme":"/library/metadata/6555/theme/1586736713",
+      "originallyAvailableAt":"2011-10-05",
+      "addedAt":1359645261,
+      "updatedAt":1586736742,
+      "Writer":[
+         {
+            "id":42216,
+            "filter":"writer=42216",
+            "tag":"Brad Falchuk"
+         },
+         {
+            "id":42217,
+            "filter":"writer=42217",
+            "tag":"Ryan Murphy"
+         }
+      ]
+   }
+}

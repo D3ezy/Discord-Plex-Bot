@@ -6,23 +6,49 @@ import requests
 import time
 from ipstack import GeoLookup
 
-# todo
-# currently only works for movies
-# new to do tv show and new library content
-# geolocator is struggling
-
-# incoming webhook from Plex: http://10.0.0.27:8080 (local ip address)
+# globals
 discord_webhook_url = 'https://discord.com/api/webhooks/782024297833168907/SpJrIT59hWZGqeCFxqSjLVEJuqkLmkzPbjq8z-VBISEbE_HLZpPBDejskkbH_aF1WUQa'
 geo_lookup = GeoLookup("7229b30ec53c20cf2d5dca3f911b89e2")
 plex_authtoken='?X-Plex-Token=cLwPefG5xRGaTzqEzsau'
 plex_url_header='http://10.0.0.19:32400'
 
 def process_post_request(request, *args, **kwargs):
+    # check user agent header - send to proper function handler
+    agent = request.headers['User-Agent']
+    if agent.startswith("PlexMediaServer"):
+        # plex
+        print("This is a Plex webhook\n")
+        handle_plex_wh(kwargs)
+        return
+    elif agent.startswith("Ombi"):
+        # ombi
+        print("This is an Ombi webhook\n")
+        handle_ombi_wh(request)
+        return
+    elif agent.startswith("Sonarr") or agent.startswith("Radarr"):
+        # sonarr/radarr?
+        print("This is a Sonarr/Radarr webhook\n")
+        handle_arr_wh(request, args, kwargs)
+        return
+    else:
+        print("Unhandled request type: {}".format(agent))
 
-    keyword_args_json = json.loads(kwargs['payload'])
-    print(keyword_args_json)
-    print("\n")
-    print("\n")
+
+def handle_ombi_wh(request):
+    # read body of msg, convert to json dict
+    body = request.body.read(int(request.headers["Content-Length"]))
+    req = json.loads(body)
+    format_ombi_event(req)
+
+
+def handle_arr_wh(request):
+    # read body of msg, convert to json dict
+    body = request.body.read(int(request.headers["Content-Length"]))
+    req = json.loads(body)
+
+def handle_plex_wh(keyword_args):
+    # load request
+    keyword_args_json = json.loads(keyword_args['payload'])
 
     # get event type
     event = keyword_args_json['event']
@@ -39,6 +65,38 @@ def process_post_request(request, *args, **kwargs):
     else:
         print("Unknown payload type: {}".format(event))
         return
+
+def format_ombi_event(payload):
+    # post data to Discord webhook
+    webhook = DiscordWebhook(url=discord_webhook_url)
+
+    # get data
+    eventTitle = payload['applicationName']
+    thumbnail = payload['posterImage']
+    requested_user = payload['requestedUser']
+    media_title = payload['title']
+    date_req = payload['requestedDate']
+    media_type = payload['type']
+    summary = payload['overview']
+    year = payload['year']
+
+    # create embed object for webhook
+    embed = DiscordEmbed(title=eventTitle, description="Placeholder", color=242424)
+    embed.set_thumbnail(url=thumbnail)
+    embed.set_author(name="Soot Gremlin",url="https://github.com/D3ezy",icon_url="https://avatars.githubusercontent.com/u/32646503?s=400&u=9f02fae3237ee64b1ceb853d37722c67ce4f8338&v=4")
+    embed.add_embed_field(name='User',value=requested_user)
+    embed.add_embed_field(name='Title',value=media_title)
+    embed.add_embed_field(name='Date Requested',value=date_req)
+    embed.add_embed_field(name='Type',value=media_type)
+    embed.add_embed_field(name="Summary",value=summary, inline=False)
+    embed.add_embed_field(name='Year',value=year)
+    embed.set_footer(text='Placeholder', icon_url='https://www.pngkey.com/png/full/910-9103810_plex-media-server-transparent-plex-icon.png')
+    embed.set_timestamp()
+
+    # add embed object to webhook
+    webhook.add_embed(embed)
+    response = webhook.execute()
+    return
 
 def format_owner_event(payload_args,event_type):
     # if one of following events:
@@ -114,7 +172,7 @@ def format_playback_event(payload_args, event_type):
         # get movie art
         artRelativePath = metadata['thumb']
         artFullPath = plex_url_header + artRelativePath + plex_authtoken
-        embed.set_image(url='https://i.imgur.com/Oe0UaTL.jpeg')
+        embed.set_image(url=artFullPath)
         embed.add_embed_field(name='Title', value=mediaTitle)
         embed.add_embed_field(name='Studio', value=mediaStudio)
         embed.add_embed_field(name='IMDb Link', value=imdb_link, inline=False)

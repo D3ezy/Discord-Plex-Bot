@@ -1,0 +1,52 @@
+{
+   "rating":"10",
+   "event":"media.rate",
+   "user":true,
+   "owner":true,
+   "Account":{
+      "id":1,
+      "thumb":"https://plex.tv/users/80a6e69c3c1f03cb/avatar?c=1613611010",
+      "title":"matthew.dey"
+   },
+   "Server":{
+      "title":"DZ-PLEX02",
+      "uuid":"566fab946feaff9bcaf819bac2ab1cec5eb7ac61"
+   },
+   "Player":{
+      "local":true,
+      "publicAddress":"73.195.83.228",
+      "title":"Chrome",
+      "uuid":"tqvr2dirf5qrd7pun4j8k909"
+   },
+   "Metadata":{
+      "librarySectionType":"show",
+      "ratingKey":"8487",
+      "key":"/library/metadata/8487/children",
+      "parentRatingKey":"8486",
+      "guid":"com.plexapp.agents.thetvdb://270633/1?lang=en",
+      "parentGuid":"com.plexapp.agents.thetvdb://270633?lang=en",
+      "type":"season",
+      "title":"Season 1",
+      "parentKey":"/library/metadata/8486",
+      "librarySectionTitle":"TV Shows",
+      "librarySectionID":3,
+      "librarySectionKey":"/library/sections/3",
+      "parentTitle":"True Detective",
+      "summary":"",
+      "index":1,
+      "parentIndex":1,
+      "userRating":10.0,
+      "viewCount":5,
+      "lastViewedAt":1611896077,
+      "lastRatedAt":1613696181,
+      "parentYear":2014,
+      "thumb":"/library/metadata/8487/thumb/1586737285",
+      "art":"/library/metadata/8486/art/1586737285",
+      "parentThumb":"/library/metadata/8486/thumb/1586737285",
+      "parentTheme":"/library/metadata/8486/theme/1586737285",
+      "leafCount":8,
+      "viewedLeafCount":4,
+      "addedAt":1505319584,
+      "updatedAt":1586737285
+   }
+}
