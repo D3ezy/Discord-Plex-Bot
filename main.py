@@ -28,7 +28,7 @@ def process_post_request(request, *args, **kwargs):
     elif agent.startswith("Sonarr") or agent.startswith("Radarr"):
         # sonarr/radarr?
         print("This is a Sonarr/Radarr webhook\n")
-        handle_arr_wh(request, args, kwargs)
+        handle_arr_wh(request)
         return
     else:
         print("Unhandled request type: {}".format(agent))
@@ -45,6 +45,7 @@ def handle_arr_wh(request):
     # read body of msg, convert to json dict
     body = request.body.read(int(request.headers["Content-Length"]))
     req = json.loads(body)
+    print(req)
 
 def handle_plex_wh(keyword_args):
     # load request
@@ -66,11 +67,31 @@ def handle_plex_wh(keyword_args):
         print("Unknown payload type: {}".format(event))
         return
 
+def format_radarr_event(payload):
+    # if root is movie
+    movie_info = payload['movie']
+    release_info = payload['release']
+    remote_movie_info = payload['remoteMovie']
+    event_type = payload['eventType']
+    return
+
+def format_sonarr_event(payload):
+    # if root is episodes
+    episode_info = payload['episodes']
+    release_info = payload['release']
+    event_type = payload['eventType']
+    series_info = payload['series']
+    title = payload['title']
+    path = payload['path']
+    tvID = payload['tvdbId']
+    return
+
 def format_ombi_event(payload):
     # post data to Discord webhook
     webhook = DiscordWebhook(url=discord_webhook_url)
 
     # get data
+    notificationType = payload['notificationType']
     eventTitle = payload['applicationName']
     thumbnail = payload['posterImage']
     requested_user = payload['requestedUser']
@@ -80,16 +101,39 @@ def format_ombi_event(payload):
     summary = payload['overview']
     year = payload['year']
 
+    # media or TV?
+    if media_type == "Movie":
+        if notificationType == "RequestDeclined":
+            requestType = "Movie Request Decline"
+        else:
+            requestType = "Movie Request"
+    elif media_type == "Tv show":
+        if notificationType == "RequestDeclined":
+            requestType = "TV Show Request Declined"
+        else:
+            requestType = "TV Show Request"
+        # episodes = payload['episodesList']
+        seasons = payload['seasonsList']
+    else:
+        print("Unknown Media Type: {}".format(media_type))
+        requestType = "Unknown Media Type"
+
     # create embed object for webhook
-    embed = DiscordEmbed(title=eventTitle, description="Placeholder", color=242424)
-    embed.set_thumbnail(url=thumbnail)
+    embed = DiscordEmbed(title=eventTitle, description=requestType, color=242424)
+    embed.set_thumbnail(url="http://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/ombi.png")
+    embed.set_image(url=thumbnail)
     embed.set_author(name="Soot Gremlin",url="https://github.com/D3ezy",icon_url="https://avatars.githubusercontent.com/u/32646503?s=400&u=9f02fae3237ee64b1ceb853d37722c67ce4f8338&v=4")
-    embed.add_embed_field(name='User',value=requested_user)
     embed.add_embed_field(name='Title',value=media_title)
-    embed.add_embed_field(name='Date Requested',value=date_req)
-    embed.add_embed_field(name='Type',value=media_type)
+    embed.add_embed_field(name='Release Year',value=year)
+    embed.add_embed_field(name='User',value=requested_user, inline=False)
+    embed.add_embed_field(name='Date Requested',value=date_req, inline=False)
+    if media_type == "Tv show":
+        # embed.add_embed_field(name='Episodes(s) Requested',value=episodes, inline=False)
+        embed.add_embed_field(name='Season(s) Requested', value=seasons)
+    if notificationType == "RequestDeclined":
+        reason = payload['denyReason']
+        embed.add_embed_field(name='Deny Reason', value=reason, inline=False)
     embed.add_embed_field(name="Summary",value=summary, inline=False)
-    embed.add_embed_field(name='Year',value=year)
     embed.set_footer(text='Placeholder', icon_url='https://www.pngkey.com/png/full/910-9103810_plex-media-server-transparent-plex-icon.png')
     embed.set_timestamp()
 
