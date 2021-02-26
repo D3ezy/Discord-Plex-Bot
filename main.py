@@ -38,6 +38,7 @@ def handle_ombi_wh(request):
     # read body of msg, convert to json dict
     body = request.body.read(int(request.headers["Content-Length"]))
     req = json.loads(body)
+    print(req)
     format_ombi_event(req)
 
 
