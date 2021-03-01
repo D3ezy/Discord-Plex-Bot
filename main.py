@@ -4,13 +4,18 @@ from discord_webhook import DiscordWebhook,DiscordEmbed
 import pprint
 import requests
 import time
+import configparser
 from ipstack import GeoLookup
 
+# parse config file
+config = configparser.ConfigParser()
+config.read('config.ini')
+
 # globals
-discord_webhook_url = 'https://discord.com/api/webhooks/782024297833168907/SpJrIT59hWZGqeCFxqSjLVEJuqkLmkzPbjq8z-VBISEbE_HLZpPBDejskkbH_aF1WUQa'
-geo_lookup = GeoLookup("7229b30ec53c20cf2d5dca3f911b89e2")
-plex_authtoken='?X-Plex-Token=cLwPefG5xRGaTzqEzsau'
-plex_url_header='http://10.0.0.19:32400'
+discord_webhook_url = config['discord']['url']
+geo_lookup = GeoLookup(config['geolookup']['api'])
+plex_authtoken=config['plex']['token']
+plex_url_header=config['plex']['url']
 
 def process_post_request(request, *args, **kwargs):
     # check user agent header - send to proper function handler

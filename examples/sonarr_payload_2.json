@@ -16,7 +16,7 @@
    "episodeFile":{
       "id":6625,
       "relativePath":"Season 04\\That '70s Show - S04E03 - Pinciotti vs. Forman Bluray-1080p.mkv",
-      "path":"D:\\NZBGet\\complete\\tv\\That.70s.Show.S04E03.1080p.BluRay.x264-FilmHD-Obfuscated\\SJZzdv3zcvX6p7oGGe28kveVpkKw9Bfd.mkv",
+      "path":"X:\\path\\to\\my\\file",
       "quality":"Bluray-1080p",
       "qualityVersion":1,
       "releaseGroup":"FilmHD",
@@ -27,7 +27,7 @@
    "series":{
       "id":273,
       "title":"That '70s Show",
-      "path":"\\\\10.0.0.80\\Plex\\Television\\That '70s Show",
+      "path":"C:\\Path\\to\\my\\file",
       "tvdbId":73787
    }
 }

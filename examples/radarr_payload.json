@@ -3,7 +3,7 @@
       "id":1681,
       "title":"Dead Poets Society",
       "releaseDate":"2002-09-17",
-      "folderPath":"\\\\10.0.0.80\\Plex\\Movies\\Dead Poets Society (1989)",
+      "folderPath":"\\\\location\\directory\\folder\\Dead Poets Society (1989)",
       "tmdbId":207,
       "imdbId":"tt0097165"
    },
@@ -18,10 +18,10 @@
       "qualityVersion":1,
       "releaseGroup":"AMIABLE",
       "releaseTitle":"Dead.Poets.Society.1989.1080p.BluRay.X264.1-AMIABLE-Obfuscated",
-      "indexer":"NZBgeek",
+      "indexer":"Lol",
       "size":9871161000
    },
-   "downloadClient":"NZBGet",
+   "downloadClient":"Lol",
    "downloadId":"faebb2edfb044dd09084bb60f4362a82",
    "eventType":"Grab"
 }

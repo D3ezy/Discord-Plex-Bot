@@ -5,15 +5,15 @@
    "Account":{
       "id":1,
       "thumb":"https://plex.tv/users/80a6e69c3c1f03cb/avatar?c=1586906337",
-      "title":"matthew.dey"
+      "title":"not.deezy"
    },
    "Server":{
-      "title":"DZ-PLEX02",
-      "uuid":"566fab946feaff9bcaf819bac2ab1cec5eb7ac61"
+      "title":"not_my_server",
+      "uuid":"fdgdfsgdsfgdfsgsdfgsdfgsdfg"
    },
    "Player":{
       "local":true,
-      "publicAddress":"73.195.83.228",
+      "publicAddress":"111.1111.1111.111",
       "title":"Chrome",
       "uuid":"tqvr2dirf5qrd7pun4j8k909"
    },
