@@ -1,2 +1,2 @@
 # Discord-Plex-Bot
-WIP
+Hello! This is a work in progress. I will be updating this README soon!
